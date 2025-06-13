@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>موقع تعلم الترجمة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('en.webp');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            color: #333;
+        }
+
+        #flashcards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .flashcard {
+            width: 200px;
+            height: 150px;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 120%;
+            height: 120%;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            backface-visibility: hidden;
+            background-color: #4f2222;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            color: wheat;
+        }
+
+        .card-back {
+            background-color: #604b6e;
+            color: white;
+            transform: rotateY(180deg);
+            position: relative;
+
+        }
+
+        .play-button {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .controls input {
+            width: 450px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.9s;
+        }
+
+        .controls input:focus {
+            border-color: #2e7d32;
+        }
+
+
+        .card-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-navigation button {
+            padding: 10px 16px;
+            font-size: 16px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            height: 50px;
+            margin-left: 28px;
+            /* نفس ارتفاع البطاقة */
+        }
+
+        a button {
+            background-color: #2196F3;
+            color: white;
+            font-size: 16px;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        a button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+    <style>
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #cac7c7;
+            background-color: rgb(13, 66, 42);
+            border-radius: 6px;
+            padding: 12px;
+
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            margin: 0;
+            background-color: rgba(192, 119, 68, 0.5);
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: #333;
+            transition: 0.3s;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="custom-navbar">
+        <div class="nav-container">
+            <a href="Home.html" class="brand">learning English</a>
+            <ul class="nav-links">
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="Quize.html">Quize</a></li>
+                <li><a href="video ar.html">arabic letters</a></li>
+                <li><a href="video en.html"> english letters</a></li>
+
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section d-flex justify-content-center align-items-center">
+        <div style="margin-top: 36px;" class="text-center hero-content">
+
+            <div class="controls">
+                <input type="text" id="search" style="margin-left: 59px;" placeholder="ابحث عن كلمة...">
+            </div>
+
+            <div class="card-navigation">
+                <button onclick="prevCard()">السابق</button> <br>
+                <div id="flashcards-container"></div><br>
+                <button onclick="nextCard()">التالي</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="color: black;margin-top: 200px;">
+        <a href="#" style="color: #000;">About Us</a> |
+        <a href="#" style="color: #000;">Support 24x7</a> |
+        <a href="#" style="color: #000;">Privacy Policy</a>
+    </div>
+
+    <script>
+        const words = [
+            { word: "تفاحة", translation: "Apple" },
+            { word: "سيارة", translation: "Car" },
+            { word: "كتاب", translation: "Book" },
+            { word: "كلب", translation: "Dog" },
+            { word: "شمس", translation: "Sun" },
+            { word: "قمر", translation: "Moon" },
+            { word: "شجرة", translation: "Tree" },
+            { word: "ماء", translation: "Water" },
+            { word: "نار", translation: "Fire" },
+            { word: "هواء", translation: "Air" },
+            { word: "طاولة", translation: "Table" },
+            { word: "كرسي", translation: "Chair" },
+            { word: "هاتف", translation: "Phone" },
+            { word: "حاسوب", translation: "Computer" },
+            { word: "قلم", translation: "Pen" },
+            { word: "ورقة", translation: "Paper" },
+            { word: "باب", translation: "Door" },
+            { word: "نافذة", translation: "Window" },
+            { word: "سرير", translation: "Bed" },
+            { word: "مصباح", translation: "Lamp" },
+            { word: "ساعة", translation: "Clock" },
+            { word: "مدينة", translation: "City" },
+            { word: "قرية", translation: "Village" },
+            { word: "طريق", translation: "Road" },
+            { word: "جبل", translation: "Mountain" },
+            { word: "نهر", translation: "River" },
+            { word: "بحر", translation: "Sea" },
+            { word: "سماء", translation: "Sky" },
+            { word: "أرض", translation: "Earth" },
+            { word: "زهرة", translation: "Flower" },
+            { word: "وردة", translation: "Rose" },
+            { word: "قط", translation: "Cat" },
+            { word: "فأر", translation: "Mouse" },
+            { word: "طائر", translation: "Bird" },
+            { word: "سمكة", translation: "Fish" },
+            { word: "ثعلب", translation: "Fox" },
+            { word: "ذئب", translation: "Wolf" },
+            { word: "أسد", translation: "Lion" },
+            { word: "نمر", translation: "Tiger" },
+            { word: "فيل", translation: "Elephant" },
+            { word: "زرافة", translation: "Giraffe" },
+            { word: "دب", translation: "Bear" },
+            { word: "خروف", translation: "Sheep" },
+            { word: "بقرة", translation: "Cow" },
+            { word: "جمل", translation: "Camel" },
+            { word: "حصان", translation: "Horse" },
+            { word: "دجاجة", translation: "Chicken" },
+            { word: "بطة", translation: "Duck" },
+            { word: "طائرة", translation: "Airplane" },
+            { word: "قطار", translation: "Train" },
+            { word: "دراجة", translation: "Bicycle" },
+            { word: "مطر", translation: "Rain" },
+            { word: "ثلج", translation: "Snow" },
+            { word: "رياح", translation: "Wind" },
+            { word: "صيف", translation: "Summer" },
+            { word: "شتاء", translation: "Winter" },
+            { word: "خريف", translation: "Autumn" },
+            { word: "ربيع", translation: "Spring" },
+            { word: "ملعقة", translation: "Spoon" },
+            { word: "سكين", translation: "Knife" },
+            { word: "شوكة", translation: "Fork" },
+            { word: "صحن", translation: "Plate" },
+            { word: "كوب", translation: "Cup" },
+            { word: "مطبخ", translation: "Kitchen" },
+            { word: "حمام", translation: "Bathroom" },
+            { word: "غرفة", translation: "Room" },
+            { word: "منزل", translation: "House" },
+            { word: "مدرسة", translation: "School" },
+            { word: "جامعة", translation: "University" },
+            { word: "معلم", translation: "Teacher" },
+            { word: "طالب", translation: "Student" }
+        ];
+
+
+        let currentIndex = 0;
+        const container = document.getElementById('flashcards-container');
+        const searchInput = document.getElementById('search');
+
+        function createCard({ word, translation }) {
+            const card = document.createElement("div");
+            card.className = "flashcard";
+            card.innerHTML = `
+    <div class="card-inner">
+      <div class="card-front">${word}</div>
+      <div class="card-back">
+        ${translation}
+        <button class="play-button" onclick="event.stopPropagation(); playAudio('${translation}')">🔊</button>
+      </div>
+    </div>
+  `;
+            card.onclick = () => card.classList.toggle('flipped');
+            return card;
+        }
+
+
+        function renderCards(filteredWords) {
+            container.innerHTML = "";
+            filteredWords.forEach(wordData => container.appendChild(createCard(wordData)));
+        }
+
+        function playAudio(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            speechSynthesis.speak(utterance);
+        }
+
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % words.length;
+            renderCards([words[currentIndex]]);
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            renderCards([words[currentIndex]]);
+        }
+
+        searchInput.addEventListener("input", () => {
+            const value = searchInput.value.toLowerCase();
+
+            if (value.trim() === "") {
+                // لو البحث فاضي، خليه يفضي الكروت
+                container.innerHTML = "";
+                return;
+            }
+
+            const filtered = words.filter(item => item.word.toLowerCase().includes(value));
+            renderCards(filtered);
+        });
+
+        // عرض أول بطاقة عند بدء الصفحة
+        renderCards([words[0]]);
+    </script>
+
+</body>
+
+</html>
